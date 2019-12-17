@@ -12,14 +12,14 @@ import {
 import defaultIcons from "./Icons";
 import FlipCard from "react-native-flip-card";
 
-const BASE_SIZE = { width: 300, height: 190 };
+const BASE_SIZE = { width: 320, height: 200 };
 
 const s = StyleSheet.create({
   cardContainer: {},
   cardFace: {},
   icon: {
     position: "absolute",
-    top: 15,
+    top: 30,
     right: 15,
     width: 60,
     height: 40,
@@ -37,28 +37,28 @@ const s = StyleSheet.create({
     color: "rgba(255, 255, 255, 1)",
   },
   number: {
-    fontSize: 21,
+    fontSize: 18,
     position: "absolute",
     top: 95,
-    left: 28,
+    left:30,
   },
   name: {
     fontSize: 16,
     position: "absolute",
-    bottom: 20,
+    bottom: 30,
     left: 25,
     right: 100,
   },
   expiryLabel: {
     fontSize: 9,
     position: "absolute",
-    bottom: 40,
+    bottom: 50,
     left: 218,
   },
   expiry: {
     fontSize: 16,
     position: "absolute",
-    bottom: 20,
+    bottom: 30,
     left: 220,
   },
   amexCVC: {

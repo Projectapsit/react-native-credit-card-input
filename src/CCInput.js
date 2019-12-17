@@ -51,6 +51,7 @@ export default class CCInput extends Component {
     onBecomeEmpty: () => {},
     onBecomeValid: () => {},
     additionalInputProps: {},
+    message:'Invalid Input*'
   };
 
   componentWillReceiveProps = newProps => {
@@ -70,7 +71,7 @@ export default class CCInput extends Component {
     const { label, value, placeholder, status, keyboardType,
             containerStyle, inputStyle, labelStyle,
             validColor, invalidColor, placeholderColor,
-            additionalInputProps } = this.props;
+            additionalInputProps,message } = this.props;
     return (
       <TouchableOpacity onPress={this.focus}
         activeOpacity={0.99}>
@@ -95,6 +96,7 @@ export default class CCInput extends Component {
             onFocus={this._onFocus}
             onChangeText={this._onChange} />
         </View>
+  <Text style={{color:invalidColor,marginTop:3}}>{validColor && status === "invalid" ? message : null}</Text>
       </TouchableOpacity>
     );
   }

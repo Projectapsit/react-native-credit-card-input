@@ -1,5 +1,5 @@
 import connectToState from "./connectToState";
-import CCF from "./CreditCardInput";
+import CCF from "./CreditCardInput"
 import LiteCCF from "./LiteCreditCardInput";
 import CV from "./CardView";
 
