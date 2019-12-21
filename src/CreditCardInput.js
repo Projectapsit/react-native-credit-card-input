@@ -9,15 +9,54 @@ import ReactNative, {
   Dimensions,
   TextInput,
   ViewPropTypes,
+  TouchableOpacity
 } from "react-native";
-
+const CVC_INPUT_WIDTH = (Dimensions.get("window").width - 30)/2.5;
+const EXPIRY_INPUT_WIDTH = (Dimensions.get("window").width - 30)/2.5;
+const CARD_NUMBER_INPUT_WIDTH_OFFSET = 40;
+const CARD_NUMBER_INPUT_WIDTH = Dimensions.get("window").width - 30;
+const NAME_INPUT_WIDTH = CARD_NUMBER_INPUT_WIDTH;
+const PREVIOUS_FIELD_OFFSET = 40;
+const POSTAL_CODE_INPUT_WIDTH = 120;
 import CreditCard from "./CardView";
 import CCInput from "./CCInput";
 import { InjectedProps } from "./connectToState";
 
 const s = StyleSheet.create({
+
+  tabContainer:{
+    display:'flex',
+   flexDirection:'row',
+   justifyContent:'space-between',
+   margin:10
+   
+  
+
+  },
+
+  tabStyle:{
+    borderColor:"#058584",
+    borderWidth:1,
+    flex:1,
+    padding:10,
+    
+    borderRadius: 4,
+    
+  },
+  tabStyleClicked:{
+    borderColor:"#058584",
+    borderWidth:1,
+    flex:1,
+    padding:10,
+    backgroundColor: "#058584",
+    borderRadius: 4,
+
+   
+  },
   container: {
-    marginLeft:50,
+    marginLeft:40,
+    marginRight:40,
+    // marginLeft:50,
     // marginRight:50
   },
   form: {
@@ -26,33 +65,34 @@ const s = StyleSheet.create({
   },
   inputContainer: {
     // marginLeft: 50
+    
   },
   inputLabel: {
-    marginTop:25,
+    // marginTop:25,
     fontSize:16,
     color:'#058584'
   },
   input: {
-    height: 40
+    height: 40,
+    backgroundColor:"#EFEFEF",
+    borderRadius: 10
   },
   expCvv:{
    display:'flex',
    flexDirection:'row',
    justifyContent:'space-between',
-   marginBottom:5 
+  //  marginBottom:5 
   }
 });
 
-const CVC_INPUT_WIDTH = 50;
-const EXPIRY_INPUT_WIDTH = 70;
-const CARD_NUMBER_INPUT_WIDTH_OFFSET = 40;
-const CARD_NUMBER_INPUT_WIDTH = Dimensions.get("window").width - EXPIRY_INPUT_WIDTH - CARD_NUMBER_INPUT_WIDTH_OFFSET;
-const NAME_INPUT_WIDTH = CARD_NUMBER_INPUT_WIDTH;
-const PREVIOUS_FIELD_OFFSET = 40;
-const POSTAL_CODE_INPUT_WIDTH = 120;
+
 
 /* eslint react/prop-types: 0 */ // https://github.com/yannickcr/eslint-plugin-react/issues/106
 export default class CreditCardInput extends Component {
+  state={
+    isDebitButtonChecked:false,
+    isCreditButtonChecked:false
+  };
   static propTypes = {
     ...InjectedProps,
     labels: PropTypes.object,
@@ -94,8 +134,9 @@ export default class CreditCardInput extends Component {
       postalCode: "34567",
     },
     inputContainerStyle: {
-      borderBottomWidth: 1,
-      borderBottomColor: "#058584",
+      // borderBottomWidth: 1,
+      // borderBottomColor: "#058584",
+      borderRadius:10
     },
     validColor: "",
     invalidColor: "red",
@@ -159,6 +200,7 @@ export default class CreditCardInput extends Component {
 
     return (
       <View style={s.container}>
+        <View style={s.conntainer}>
         <CreditCard focused={focused}
           brand={type}
           scale={cardScale}
@@ -170,15 +212,51 @@ export default class CreditCardInput extends Component {
           number={number}
           expiry={expiry}
           cvc={cvc} />
-        <ScrollView ref="Form"
+          </View>
+        <ScrollView ref="Form" 
           keyboardShouldPersistTaps="always"
           scrollEnabled={allowScroll}
           showsHorizontalScrollIndicator={false}
           style={s.form}>
+
+
+            <View style={s.tabContainer}>
+            {this.state.isDebitButtonChecked?
+            <TouchableOpacity
+             onPress={()=>{this.setState({
+              isDebitButtonChecked:true,
+              isCreditButtonChecked:false
+            }) }}
+            style={s.tabStyle}>
+              <Text style={{color:"white"}}>Debit Card</Text></TouchableOpacity>:
+              <TouchableOpacity 
+              onPress={()=>{this.setState({
+                isDebitButtonChecked:true,
+                isCreditButtonChecked:false
+              })}}
+              style={s.tabStyleClicked}>
+              <Text>Debit Card</Text></TouchableOpacity>}
+              
+              
+             
+
+
+              <TouchableOpacity style={s.tabStyle} onPress={()=>this.setState({
+              isDebitButtonChecked:false,
+              isCreditButtonChecked:true
+            })}>
+              {this.state.isCreditButtonChecked?<Text style={{backgroundColor:"#058584",color:"white"}}>Credit Card</Text>:<Text>Credit Card</Text>}
+              {/* <Text>Credit Card</Text> */}
+              </TouchableOpacity>
+              </View>
           <CCInput {...this._inputProps("number")}
             keyboardType="numeric"
             containerStyle={[s.inputContainer, inputContainerStyle, { width: CARD_NUMBER_INPUT_WIDTH }]} />
-            <View style={s.expCvv}>
+            
+          { requiresName &&
+            <CCInput {...this._inputProps("name")}
+              containerStyle={[s.inputContainer, inputContainerStyle, { width: NAME_INPUT_WIDTH }]} /> }
+              <View style={s.expCvv}>
           <CCInput {...this._inputProps("expiry")}
             keyboardType="numeric"
             containerStyle={[s.inputContainer, inputContainerStyle, { width: EXPIRY_INPUT_WIDTH }]} />
@@ -186,9 +264,6 @@ export default class CreditCardInput extends Component {
             <CCInput {...this._inputProps("cvc")}
               keyboardType="numeric"
               containerStyle={[s.inputContainer, inputContainerStyle, { width: CVC_INPUT_WIDTH }]} /> }</View>
-          { requiresName &&
-            <CCInput {...this._inputProps("name")}
-              containerStyle={[s.inputContainer, inputContainerStyle, { width: NAME_INPUT_WIDTH }]} /> }
           { requiresPostalCode &&
             <CCInput {...this._inputProps("postalCode")}
               keyboardType="numeric"
